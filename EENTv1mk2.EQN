@@ -1,0 +1,22 @@
+ElectronEconet 
+; PartNo   00             
+; Date     13/07/2022     
+; Revision 02             
+; Designer Roland Leurs   
+
+Chip ElectronEconet GAL22V10         
+
+O0    A1     A2        A3    A4  A5     A6      A7     nPGFC RnW    ROM13EN GND
+INTIN NMIOUT NMIENABLE RESET nRD nINTON nSTATID nc1    ROMOE nCSROM nCSADLC VCC
+
+EQUATIONS
+
+/nRD     = O0 * RnW;
+/nCSROM  = /ROMOE + /ROM13EN;
+/nCSADLC = /nPGFC * /A7 * /A6 * A5 */A4 * A3 * /A2;
+/nSTATID = /nPGFC * /A7 * /A6 * A5 */A4 * A3 * A2 * /A1 * RnW * O0;
+/nINTON  = /nPGFC * /A7 * /A6 * A5 */A4 * A3 * A2 *  A1 * RnW * O0;
+ NMIOUT  = NMIENABLE * /INTIN;
+
+NMIENABLE = RESET * /nINTON * /nSTATID * NMIENABLE + RESET * /nINTON * nSTATID + RESET * nINTON * nSTATID * NMIENABLE;
+
